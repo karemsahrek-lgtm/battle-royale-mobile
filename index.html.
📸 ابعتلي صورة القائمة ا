@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battle Royale Mobile</title>
+<style>
+body{margin:0;background:#182a1d;color:white;font-family:Arial;text-align:center}
+h2{padding:12px}
+canvas{width:100%;height:65vh;background:#8bb85b;display:block}
+button{padding:14px 20px;margin:5px;border:0;border-radius:12px;font-size:18px}
+</style>
+</head>
+<body>
+<h2>🎮 BATTLE ROYALE</h2>
+<canvas id="game"></canvas>
+<div>
+<button onclick="move(-15,0)">⬅️</button>
+<button onclick="move(0,-15)">⬆️</button>
+<button onclick="move(0,15)">⬇️</button>
+<button onclick="move(15,0)">➡️</button>
+<button onclick="shoot()">🔫 إطلاق</button>
+</div>
+<p id="info">تحرك واستعد للمعركة!</p>
+<script>
+const c=document.getElementById('game');
+const ctx=c.getContext('2d');
+let x=180,y=180,shots=[];
+function draw(){
+ c.width=c.clientWidth*devicePixelRatio;
+ c.height=c.clientHeight*devicePixelRatio;
+ ctx.scale(devicePixelRatio,devicePixelRatio);
+ let w=c.clientWidth,h=c.clientHeight;
+ ctx.fillStyle='#8bb85b';ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='#609447';
+ for(let i=0;i<12;i++){
+ let tx=(i*97+30)%w,ty=(i*71+20)%h;
+ ctx.beginPath();ctx.arc(tx,ty,15,0,7);ctx.fill();
+ }
+ ctx.fillStyle='#243bdb';
+ ctx.fillRect(x-10,y-10,20,25);
+ ctx.fillStyle='white';ctx.fillRect(x-5,y-16,10,10);
+ ctx.fillStyle='#222';
+ shots.forEach(s=>{ctx.beginPath();ctx.arc(s.x,s.y,5,0,7);ctx.fill()});
+}
+function move(dx,dy){
+ x=Math.max(12,Math.min(c.clientWidth-12,x+dx));
+ y=Math.max(20,Math.min(c.clientHeight-20,y+dy));
+ draw();
+}
+function shoot(){
+ shots.push({x:x+15,y:y});
+ document.getElementById('info').textContent='🔫 أطلقت طلقة! عدد الطلقات: '+shots.length;
+ draw();
+}
+window.addEventListener('resize',draw);
+draw();
+</script>
+</body>
+</html>
